@@ -186,7 +186,9 @@
 	echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 	echo "  <tr>\n";
 	echo "	<td align='left' width='100%'>\n";
-	echo "		<b>".$text['header-voicemails']." (".$total_voicemails.")</b><br>\n";
+	echo "		<div class='action_bar' id='action_bar'>\n";
+	echo "			<div class='heading'><b>".$text['header-voicemails']."</b><div class='count'>".$total_voicemails."</div></div><br>\n";
+	echo "		</div>\n";
 
 //options list
 	echo "<form name='frm' method='get' id=option_selected>\n";
@@ -209,7 +211,7 @@
 	echo "		<td align='right' width='100%' style='vertical-align: top;'>";
 	echo "		<form method='get' action=''>\n";
 	echo "			<td style='vertical-align: top; text-align: right; white-space: nowrap;'>\n";
-	echo "				<input type='button' class='btn' alt='".$text['button-back']."' onclick=\"window.location='bulk_account_settings.php'\" value='".$text['button-back']."'>\n";
+	echo "				<input type='button' class='btn' style='width: 40px' alt='".$text['button-back']."' onclick=\"window.location='bulk_account_settings.php'\" value='".$text['button-back']."'>\n";
 	echo "				<input type='text' class='txt' style='width: 150px' name='search' id='search' value='".$search."'>";
 	echo "				<input type='hidden' class='txt' style='width: 150px' name='option_selected' id='option_selected' value='".$option_selected."'>";
 	echo "				<input type='submit' class='btn' name='submit' value='".$text['button-search']."'>";
@@ -303,6 +305,8 @@
 		echo "</table>";
 		echo "<br />";
 	}
+
+	echo "<div class='card'>\n";
 	echo "<table class='tr_hover' width='100%' border='0' cellpadding='0' cellspacing='0'>\n";
 	echo "<tr>\n";
 	if (!empty($directory)) {
@@ -358,8 +362,9 @@
 		echo "</tr>\n";
 		$c = ($c) ? 0 : 1;
 	}
-	echo "</table>";
-	echo "</form>";
+	echo "</table>\n";
+	echo "</div>\n";
+	echo "</form>\n";
 
 	if (strlen($paging_controls) > 0) {
 		echo "<br />";
