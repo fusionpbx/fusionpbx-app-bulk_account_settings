@@ -112,10 +112,8 @@
 		$parameters['search'] = '%'.$search.'%';
 	}
 	if ($rows_per_page > 0) {
-		$sql .= "order by :order_by :order ";
+		$sql .= "ORDER BY ".$order_by." ".$order . " ";
 		$sql .= "limit $rows_per_page offset $offset ";
-		$parameters['order_by'] = $order_by;
-		$parameters['order'] = $order;
 	}
 	$parameters['domain_uuid'] = $domain_uuid;
 	$directory = $database->select($sql, $parameters ,'all');
