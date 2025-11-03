@@ -174,7 +174,7 @@
 	$sql .= "order by ";
 	$sql .= "	u.domain_uuid desc, ";
 	$sql .= "	u.username asc ";
-	$result = $database->select($sql, 'all');
+	$result = $database->select($sql, [],'all');
 	if (is_array($result) > 0) {
 		foreach($result as $row) {
 			$user_time_zone[$row['user_uuid']][] = $row['user_setting_value'];
