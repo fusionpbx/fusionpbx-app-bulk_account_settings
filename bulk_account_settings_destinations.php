@@ -20,8 +20,6 @@
 	Portions created by the Initial Developer are Copyright (C) 2008-2026
 	the Initial Developer. All Rights Reserved.
 
-	Contributor(s):
-	KonradSC <konrd@yahoo.com>
 */
 
 //includes files
