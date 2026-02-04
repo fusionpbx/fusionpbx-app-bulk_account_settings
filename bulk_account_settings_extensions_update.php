@@ -43,6 +43,7 @@
 	$extension_options[] = 'accountcode';
 	$extension_options[] = 'call_group';
 	$extension_options[] = 'call_timeout';
+	$extension_options[] = 'context';
 	$extension_options[] = 'emergency_caller_id_name';
 	$extension_options[] = 'emergency_caller_id_number';
 	$extension_options[] = 'enabled';
@@ -107,7 +108,12 @@
 
 				$array["extensions"][$i]["domain_uuid"] = $domain_uuid;
 				$array["extensions"][$i]["extension_uuid"] = $extension_uuid;
-				$array["extensions"][$i][$option_selected] = $new_setting;
+				if ($option_selected == 'context') {
+					$array["extensions"][$i]["user_context"] = $new_setting;
+				}
+				else {
+					$array["extensions"][$i][$option_selected] = $new_setting;
+				}
 
 				//clear the cache
 				$cache->delete("directory:".$extension."@".$user_context);
