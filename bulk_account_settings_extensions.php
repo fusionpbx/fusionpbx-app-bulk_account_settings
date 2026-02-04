@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2025
+	Portions created by the Initial Developer are Copyright (C) 2008-2026
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -43,6 +43,7 @@
 	$extension_options[] = 'accountcode';
 	$extension_options[] = 'call_group';
 	$extension_options[] = 'call_timeout';
+	$extension_options[] = 'context';
 	$extension_options[] = 'emergency_caller_id_name';
 	$extension_options[] = 'emergency_caller_id_number';
 	$extension_options[] = 'enabled';
@@ -138,11 +139,12 @@
 	$sql .= "description, ";
 	$sql .= "extension, ";
 	$sql .= "extension_uuid, ";
-	if (!empty($option_selected) && $option_selected !== 'call_group' && $option_selected !== 'accountcode') {
+	if (!empty($option_selected) && $option_selected !== 'context' && $option_selected !== 'call_group' && $option_selected !== 'accountcode') {
 		$sql .= $option_selected . ", ";
 	}
 	$sql .= "accountcode, ";
-	$sql .= "call_group ";
+	$sql .= "call_group, ";
+	$sql .= "user_context AS context ";
 	$sql .= "FROM v_extensions ";
 	$sql .= "WHERE domain_uuid = :domain_uuid ";
 	//add search mod from above
@@ -162,8 +164,6 @@
 //additional includes
 	$document['title'] = $text['title-extension_settings'];
 	require_once "resources/header.php";
-
-
 
 //show the content
 	echo "<div class='action_bar' id='action_bar'>\n";
@@ -224,6 +224,7 @@
 			$option_selected == 'accountcode' ||
 			$option_selected == 'call_group' ||
 			$option_selected == 'call_timeout' ||
+			$option_selected == 'context' ||
 			$option_selected == 'emergency_caller_id_name' ||
 			$option_selected == 'emergency_caller_id_number' ||
 			$option_selected == 'limit_max' ||
