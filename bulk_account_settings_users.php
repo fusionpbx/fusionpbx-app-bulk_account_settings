@@ -438,7 +438,7 @@
 			echo "	<td><a href='".$list_row_url."'>".escape($row['username'])."</a></td>\n";
 			echo "	<td>".escape($row['user_status'])."&nbsp;</td>\n";
 			echo "	<td>";
-				if (count($user_groups[$row['user_uuid']]) > 0) {
+				if (!empty($user_groups[$row['user_uuid']])) {
 					echo implode(', ', $user_groups[$row['user_uuid']]);
 				}
 				echo "&nbsp;</td>\n";
