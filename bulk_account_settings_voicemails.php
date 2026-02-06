@@ -48,6 +48,7 @@
 	$voicemail_options[] = 'voicemail_file';
 	$voicemail_options[] = 'voicemail_enabled';
 	$voicemail_options[] = 'voicemail_local_after_email';
+	$voicemail_options[] = 'voicemail_transcription_enabled';
 	$voicemail_options[] = 'voicemail_password';
 	$voicemail_options[] = 'voicemail_option_0';
 	$voicemail_options[] = 'voicemail_option_1';
