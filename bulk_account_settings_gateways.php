@@ -79,14 +79,7 @@
 		$sql_mod .= "or lower(proxy) like :search ";
 		$sql_mod .= "or lower(description) like :search ";
 		if (!empty($option_selected)) {
-			switch ($option_selected) {
-				case 'context':
-				case 'sip_force_expires':
-					$sql_mod .= "or lower(cast (".$option_selected." as text)) like :search ";
-					break;
-				default:
-					$sql_mod .= "or lower(".$option_selected.") like :search ";
-			}
+			$sql_mod .= "or lower(".$option_selected.") like :search ";
 		}
 		$sql_mod .= ") ";
 		$parameters['search'] = '%'.strtolower($search).'%';
