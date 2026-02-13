@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2025
+	Portions created by the Initial Developer are Copyright (C) 2008-2026
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -79,7 +79,7 @@
 		foreach($gateway_uuids as $i => $gateway_uuid) {
 			if (is_uuid($gateway_uuid)) {
 				//get the gateways array
-				$sql = "select gateway from v_gateways ";
+				$sql = "select * from v_gateways ";
 				$sql .= "where domain_uuid = :domain_uuid ";
 				$sql .= "and gateway_uuid = :gateway_uuid ";
 				$parameters['gateway_uuid'] = $gateway_uuid;
@@ -93,12 +93,6 @@
 				$array["gateways"][$i]["domain_uuid"] = $domain_uuid;
 				$array["gateways"][$i]["gateway_uuid"] = $gateway_uuid;
 				$array["gateways"][$i][$option_selected] = $new_setting;
-
-				//clear the cache
-				$cache->delete("directory:".$gateway."@".$user_context);
-				if (permission_exists('number_alias') && strlen($number_alias) > 0) {
-					$cache->delete("directory:".$number_alias."@".$user_context);
-				}
 			}
 		}
 		if (!empty($array)) {
