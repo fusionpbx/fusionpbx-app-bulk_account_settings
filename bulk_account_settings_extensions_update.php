@@ -17,7 +17,7 @@
 
 	The Initial Developer of the Original Code is
 	Mark J Crane <markjcrane@fusionpbx.com>
-	Portions created by the Initial Developer are Copyright (C) 2008-2025
+	Portions created by the Initial Developer are Copyright (C) 2008-202^
 	the Initial Developer. All Rights Reserved.
 
 	Contributor(s):
@@ -81,7 +81,7 @@
 			echo "</html>\n";
 			exit();
 		}
-		$new_setting = preg_replace('#[^a-zA-Z0-9_ \-/@\.\$\:]#', '',$_REQUEST["new_setting"] ?? '');
+		$new_setting = preg_replace('#[^a-zA-Z0-9_ \-/@\.\$\:+]#', '',$_REQUEST["new_setting"] ?? '');
 		//prohibit double dash --
 		$new_setting = str_replace('--', '', $new_setting);
 		//set parameter for query
