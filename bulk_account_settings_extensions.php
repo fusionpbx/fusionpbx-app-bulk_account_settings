@@ -58,6 +58,7 @@
 	$extension_options[] = 'sip_force_expires';
 	$extension_options[] = 'sip_bypass_media';
 	$extension_options[] = 'mwi_account';
+	$extension_options[] = 'force_ping';
 
 //use connected database
 	$domain_uuid = $_SESSION['domain_uuid'] ?? '';
@@ -239,6 +240,14 @@
 
 		//enabled, directory visible
 		if ($option_selected === 'enabled' || $option_selected === 'directory_visible') {
+			echo "		<select class='formfld' name='new_setting'>\n";
+			echo "			<option value='true'>".$text['label-true']."</option>\n";
+			echo "			<option value='false'>".$text['label-false']."</option>\n";
+			echo "		</select>\n";
+		}
+
+		//force_ping
+		if ($option_selected === 'force_ping') {
 			echo "		<select class='formfld' name='new_setting'>\n";
 			echo "			<option value='true'>".$text['label-true']."</option>\n";
 			echo "			<option value='false'>".$text['label-false']."</option>\n";

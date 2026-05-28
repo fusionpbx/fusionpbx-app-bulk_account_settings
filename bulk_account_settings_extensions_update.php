@@ -58,6 +58,7 @@
 	$extension_options[] = 'sip_force_expires';
 	$extension_options[] = 'sip_bypass_media';
 	$extension_options[] = 'mwi_account';
+	$extension_options[] = 'force_ping';
 
 //use connected database
 	$domain_uuid = $_SESSION['domain_uuid'] ?? '';
