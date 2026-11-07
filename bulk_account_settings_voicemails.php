@@ -367,7 +367,7 @@
 						if ($v != 0) {
 							echo ", ";
 						}
-						echo $value['voicemail_option_param']." (".$value['voicemail_option_order'].")";
+						echo escape($value['voicemail_option_param'])." (".escape($value['voicemail_option_order']).")";
 					}
 				}
 				echo "&nbsp;</td>\n";

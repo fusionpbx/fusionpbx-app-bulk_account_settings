@@ -364,7 +364,7 @@
 			echo "	<td class='no-wrap'><a href='".$list_row_url."'>".escape(format_device_address($row['device_address']))."</a></td>";
 			echo "	<td>".escape($row['device_label'])."&nbsp;</td>\n";
 			if (preg_match ('/line_/',($option_selected ?? ''))) {
-				echo "	<td> ".$row[$option_selected]."&nbsp;</td>\n";
+				echo "	<td> ".escape($row[$option_selected])."&nbsp;</td>\n";
 			}
 			echo "	<td>".escape($row['device_vendor'])."&nbsp;</td>\n";
 			echo "	<td>".escape($row['device_template'])."&nbsp;</td>\n";

@@ -74,8 +74,8 @@
 	if (!empty($_REQUEST)) {
 
 		$voicemail_uuids = $_REQUEST["id"];
-		$option_selected = $_REQUEST["option_selected"];
-		$new_setting = $_REQUEST["new_setting"];
+		$option_selected = preg_replace('#[^a-zA-Z0-9_]#', '', $_REQUEST["option_selected"] ?? '');
+		$new_setting = preg_replace('#[^a-zA-Z0-9_ \-/@\.$\:]#', '',$_REQUEST["new_setting"] ?? '');
 		$option_action = $_REQUEST["option_action"];
 		$voicemail_option_param = $_REQUEST["voicemail_option_param"];
 		$voicemail_option_order = (int)$_REQUEST["voicemail_option_order"];
@@ -107,8 +107,7 @@
 		$voicemail_option_digits = $matches[1];
 
 		foreach($voicemail_uuids as $voicemail_uuid) {
-			$voicemail_uuid = check_str($voicemail_uuid);
-			if ($voicemail_uuid != '') {
+			if (is_uuid($voicemail_uuid)) {
 			//Voicemail Options
 				if (preg_match ('/voicemail_option_/',$option_selected)) {
 					//Add Options

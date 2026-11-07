@@ -439,12 +439,12 @@
 			echo "	<td>".escape($row['user_status'])."&nbsp;</td>\n";
 			echo "	<td>";
 				if (!empty($user_groups[$row['user_uuid']])) {
-					echo implode(', ', $user_groups[$row['user_uuid']]);
+					echo escape(implode(', ', $user_groups[$row['user_uuid']]));
 				}
 				echo "&nbsp;</td>\n";
 			echo "	<td>";
 				if (isset($user_time_zone[$row['user_uuid']]) && sizeof($user_time_zone[$row['user_uuid']]) > 0) {
-					echo implode(', ', $user_time_zone[$row['user_uuid']]);
+					echo escape(implode(', ', $user_time_zone[$row['user_uuid']]));
 				}
 				echo "&nbsp;</td>\n";
 			echo "	<td class='center'>".$text['label-'.(!empty($row['user_enabled']) ? 'true' : 'false')]."&nbsp;</td>\n";

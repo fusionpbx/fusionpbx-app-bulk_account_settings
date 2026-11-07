@@ -338,7 +338,7 @@
 			echo "		<input type='checkbox' name='id[]' id='checkbox_".escape($row['extension_uuid'])."' value='".escape($row['extension_uuid'])."' onclick=\"if (!this.checked) { document.getElementById('chk_all').checked = false; }\">";
 			echo "	</td>";
 			$ext_ids[] = 'checkbox_'.$row['extension_uuid'];
-			echo "	<td><a href='".$list_row_url."'>".$row['extension']."</a></td>\n";
+			echo "	<td><a href='".$list_row_url."'>".escape($row['extension'])."</a></td>\n";
 			if (!empty($option_selected) && $option_selected != 'call_group' && $option_selected != 'accountcode') {
 				if ($option_selected == 'enabled' || $option_selected == 'directory_visible') {
 					echo "	<td>".escape($text['label-'.(!empty($row[$option_selected]) ? 'true' : 'false')])."&nbsp;</td>\n";

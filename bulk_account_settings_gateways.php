@@ -254,7 +254,7 @@
 			echo "		<input type='checkbox' name='id[]' id='checkbox_".escape($row['gateway_uuid'])."' value='".escape($row['gateway_uuid'])."' onclick=\"if (!this.checked) { document.getElementById('chk_all').checked = false; }\">";
 			echo "	</td>";
 			$ext_ids[] = 'checkbox_'.$row['gateway_uuid'];
-			echo "	<td><a href='".$list_row_url."'>".$row['gateway']."</a></td>\n";
+			echo "	<td><a href='".$list_row_url."'>".escape($row['gateway'])."</a></td>\n";
 			if (!empty($option_selected) && $option_selected != 'proxy' && $option_selected != 'gateway') {
 				if ($option_selected == 'enabled') {
 					echo "	<td>".escape($text['label-'.(!empty($row[$option_selected]) ? 'true' : 'false')])."&nbsp;</td>\n";
