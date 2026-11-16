@@ -38,6 +38,14 @@
 	$language = new text;
 	$text = $language->get();
 
+//validate the token
+	$token = new token;
+	if (!$token->validate_request(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_extensions_update.php')) {
+		message::add($text['message-invalid_token'],'negative');
+		header('Location: bulk_account_settings_extensions.php');
+		exit;
+	}
+
 //set options
 	$extension_options = [];
 	$extension_options[] = 'accountcode';
@@ -83,6 +91,12 @@
 			exit();
 		}
 		$new_setting = preg_replace('#[^a-zA-Z0-9_ \-/@\.\$\:\+]#', '',$_REQUEST["new_setting"] ?? '');
+		//the context is stored as user_context, require the permission used by extension_edit.php to change it
+		if ($option_selected == 'context' && !permission_exists('extension_user_context')) {
+			header("HTTP/1.1 403 Forbidden");
+			echo "access denied";
+			exit();
+		}
 		//prohibit double dash --
 		$new_setting = str_replace('--', '', $new_setting);
 		//set parameter for query
@@ -105,6 +119,11 @@
 						$user_context = $row["user_context"];
 						$number_alias = $row["number_alias"];
 					}
+				}
+
+				//only modify extensions that belong to the current domain
+				if (empty($extensions)) {
+					continue;
 				}
 
 				$array["extensions"][$i]["domain_uuid"] = $domain_uuid;

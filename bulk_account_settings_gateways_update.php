@@ -38,6 +38,14 @@
 	$language = new text;
 	$text = $language->get();
 
+//validate the token
+	$token = new token;
+	if (!$token->validate_request(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_gateways_update.php')) {
+		message::add($text['message-invalid_token'],'negative');
+		header('Location: bulk_account_settings_gateways.php');
+		exit;
+	}
+
 //set options
 	$gateway_options = [];
 	$gateway_options[] = 'gateway';
@@ -88,6 +96,11 @@
 					foreach ($gateways as $row) {
 						$gateway = $row["gateway"];
 					}
+				}
+
+				//only modify gateways that belong to the current domain
+				if (empty($gateways)) {
+					continue;
 				}
 
 				$array["gateways"][$i]["domain_uuid"] = $domain_uuid;

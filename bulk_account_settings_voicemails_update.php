@@ -38,6 +38,14 @@
 	$language = new text;
 	$text = $language->get();
 
+//validate the token
+	$token = new token;
+	if (!$token->validate_request(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_voicemails_update.php')) {
+		message::add($text['message-invalid_token'],'negative');
+		header('Location: bulk_account_settings_voicemails.php');
+		exit;
+	}
+
 //set domain and user uuids
 	$domain_uuid = $_SESSION['domain_uuid'] ?? '';
 	$user_uuid = $_SESSION['user_uuid'] ?? '';
@@ -86,6 +94,32 @@
 			die('invalid option');
 		}
 
+		//enforce the voicemail password complexity requirements
+		if ($option_selected == 'voicemail_password' && !empty($new_setting)) {
+			$password_complexity = $settings->get('voicemail', 'password_complexity', false);
+			if ($password_complexity) {
+				$valid = true;
+				$min_length = (int)$settings->get('voicemail', 'password_min_length', 20);
+				if (is_numeric($min_length) && $min_length != 0 && strlen($new_setting) < $min_length) {
+					$valid = false;
+				}
+				if (preg_match('/[a-zA-Z\W]/', $new_setting)) {
+					$valid = false;
+				}
+				if (preg_match('/(\d)\\1{2}/', $new_setting)) {
+					$valid = false;
+				}
+				if (preg_match('/(012|123|345|456|567|678|789|987|876|765|654|543|432|321|210)/', $new_setting)) {
+					$valid = false;
+				}
+				if (!$valid) {
+					message::add($text['message-password_requirements'], 'negative', 6000);
+					header("Location: bulk_account_settings_voicemails.php?option_selected=".$option_selected."");
+					return;
+				}
+			}
+		}
+
 		//validate the option_action
 		if (!empty($option_action) && !in_array($option_action, $voicemail_actions, true)) {
 			header("HTTP/1.1 400 Bad Request");
@@ -124,6 +158,20 @@
 						$parameters['voicemail_option_digits'] = $voicemail_option_digits;
 						$parameters['voicemail_option_order'] = $voicemail_option_order;
 						$voicemails = $database->select($sql, $parameters, 'all');
+
+						//only modify voicemail options of mailboxes that belong to the current domain
+						$sql = "select voicemail_uuid from v_voicemails ";
+						$sql .= "where domain_uuid = :domain_uuid ";
+						$sql .= "and voicemail_uuid = :voicemail_uuid ";
+						$parameters = [];
+						$parameters['domain_uuid'] = $domain_uuid;
+						$parameters['voicemail_uuid'] = $voicemail_uuid;
+						$voicemail_row = $database->select($sql, $parameters, 'row');
+
+						if (empty($voicemail_row)) {
+							continue;
+						}
+
 						if (is_array($voicemails)) {
 							foreach ($voicemails as $row) {
 								$voicemail_option_uuid = $row["voicemail_option_uuid"];
@@ -156,6 +204,10 @@
 						$sql .= "where domain_uuid = :domain_uuid ";
 						$sql .= "and voicemail_uuid = :voicemail_uuid ";
 						$sql .= "and voicemail_option_digits = :voicemail_option_digits ";
+						$sql .= "and voicemail_uuid in ( ";
+						$sql .= " select voicemail_uuid from v_voicemails ";
+						$sql .= " where domain_uuid = :domain_uuid ";
+						$sql .= ") ";
 						$parameters = [];
 						$parameters['domain_uuid'] = $domain_uuid;
 						$parameters['voicemail_uuid'] = $voicemail_uuid;
@@ -174,7 +226,9 @@
 					$parameters['domain_uuid'] = $domain_uuid;
 					$parameters['voicemail_uuid'] = $voicemail_uuid;
 					$voicemails = $database->select($sql, $parameters, 'all');
-					if (is_array($voicemails)) {
+
+					//only modify voicemails that belong to the current domain
+					if (!empty($voicemails)) {
 						foreach ($voicemails as $row) {
 							$voicemail = $row["voicemail"];
 						}

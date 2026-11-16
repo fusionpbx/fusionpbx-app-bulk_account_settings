@@ -164,6 +164,11 @@
 
 //additional includes
 	$document['title'] = $text['title-user_settings'];
+
+//create a token for the update script (it validates against its own path)
+	$object = new token;
+	$token = $object->create(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_users_update.php');
+
 	require_once "resources/header.php";
 
 //javascript for password
@@ -294,6 +299,7 @@
 		echo "		<div class='field'>\n";
 
 		echo "			<form name='users' method='post' action='bulk_account_settings_users_update.php'>\n";
+		echo "			<input type='hidden' name='" . $token['name'] . "' value='" . $token['hash'] . "'>\n";
 		echo "			<input class='formfld' type='hidden' name='option_selected' maxlength='255' value=\"".escape($option_selected)."\">\n";
 
 		//password

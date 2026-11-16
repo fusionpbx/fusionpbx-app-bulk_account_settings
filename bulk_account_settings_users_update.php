@@ -38,6 +38,14 @@
 	$language = new text;
 	$text = $language->get();
 
+//validate the token
+	$token = new token;
+	if (!$token->validate_request(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_users_update.php')) {
+		message::add($text['message-invalid_token'],'negative');
+		header('Location: bulk_account_settings_users.php');
+		exit;
+	}
+
 //use connected database
 	$domain_uuid = $_SESSION['domain_uuid'] ?? '';
 	$user_uuid = $_SESSION['user_uuid'] ?? '';
@@ -92,9 +100,21 @@
 			echo "</html>\n";
 			exit();
 		}
+		//set parameter for query
+		$parameters = [];
+		$parameters['domain_uuid'] = $domain_uuid;
 		foreach ($user_uuids as $i => $user_uuid) {
 			//ensure valid uuid
 			if (!is_uuid($user_uuid)) {
+				continue;
+			}
+			//only modify users that belong to the current domain
+			$sql = "select user_uuid from v_users ";
+			$sql .= "where domain_uuid = :domain_uuid ";
+			$sql .= "and user_uuid = :user_uuid ";
+			$parameters['user_uuid'] = $user_uuid;
+			$user_row = $database->select($sql, $parameters, 'row');
+			if (empty($user_row)) {
 				continue;
 			}
 			switch ($option_selected) {

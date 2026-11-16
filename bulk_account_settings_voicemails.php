@@ -197,8 +197,14 @@
 		unset($parameters);
 	}
 
-//additional includes
+//create a token for the update script (it validates against its own path)
+	$object = new token;
+	$token = $object->create(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_voicemails_update.php');
+
+//include the header
 	require_once "resources/header.php";
+
+//set the title
 	$document['title'] = $text['title-voicemail_settings'];
 
 //initialize the destinations object
@@ -256,6 +262,7 @@
 		echo "		<div class='field'>\n";
 
 		echo "			<form name='voicemails' method='post' action='bulk_account_settings_voicemails_update.php'>\n";
+		echo "			<input type='hidden' name='" . $token['name'] . "' value='" . $token['hash'] . "'>\n";
 		echo "			<input class='formfld' type='hidden' name='option_selected' maxlength='255' value=\"".escape($option_selected)."\">\n";
 
 		//password

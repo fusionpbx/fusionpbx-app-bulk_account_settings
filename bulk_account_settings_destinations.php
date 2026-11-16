@@ -187,9 +187,12 @@
 
 //additional includes
 	$document['title'] = $text['title-destination_settings'];
+
+//create a token for the update script (it validates against its own path)
+	$object = new token;
+	$token = $object->create(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_destinations_update.php');
+
 	require_once "resources/header.php";
-
-
 
 //show the content
 	echo "<div class='action_bar' id='action_bar'>\n";
@@ -243,6 +246,7 @@
 		echo "		<div class='field'>\n";
 
 		echo "			<form name='destinations' method='post' action='bulk_account_settings_destinations_update.php'>\n";
+		echo "			<input type='hidden' name='" . $token['name'] . "' value='" . $token['hash'] . "'>\n";
 		echo "			<input class='formfld' type='hidden' name='option_selected' maxlength='255' value=\"".escape($option_selected)."\">\n";
 
 		//destination_actions - use destinations select

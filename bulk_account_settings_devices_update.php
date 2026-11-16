@@ -38,6 +38,14 @@
 	$language = new text;
 	$text = $language->get();
 
+//validate the token
+	$token = new token;
+	if (!$token->validate_request(dirname($_SERVER['PHP_SELF']) . '/bulk_account_settings_devices_update.php')) {
+		message::add($text['message-invalid_token'],'negative');
+		header('Location: bulk_account_settings_devices.php');
+		exit;
+	}
+
 //device options
 	$device_options = [];
 	$device_options[] = 'device_enabled';
@@ -89,6 +97,9 @@
 					preg_match ('/line_._(.*$)/', $option_selected, $matches);
 					$option_line = $matches[1];
 
+					//reset so a previous device's line is never reused
+					$device_line_uuid = '';
+
 					$sql = "select * from v_device_lines ";
 					$sql .= "where domain_uuid = :domain_uuid ";
 					$sql .= "and device_uuid = :device_uuid ";
@@ -104,14 +115,30 @@
 						}
 					}
 
-					$array["device_lines"][0]["device_line_uuid"] = $device_line_uuid;
-					$array["device_lines"][0][$option_line] = $new_setting;
-					$array["device_lines"][0]["domain_uuid"] = $domain_uuid;
-					$array["device_lines"][0]["device_uuid"] = $device_uuid;
-					$database->save($array);
+					//only modify device lines that belong to the current domain
+					if (!empty($device_line_uuid)) {
+						$array["device_lines"][0]["device_line_uuid"] = $device_line_uuid;
+						$array["device_lines"][0][$option_line] = $new_setting;
+						$array["device_lines"][0]["domain_uuid"] = $domain_uuid;
+						$array["device_lines"][0]["device_uuid"] = $device_uuid;
+						$database->save($array);
+					}
 				}
 				//other device settings
 				else {
+					//verify the device belongs to the current domain
+					$sql = "select device_uuid from v_devices ";
+					$sql .= "where domain_uuid = :domain_uuid ";
+					$sql .= "and device_uuid = :device_uuid ";
+					$parameters = [];
+					$parameters['domain_uuid'] = $domain_uuid;
+					$parameters['device_uuid'] = $device_uuid;
+					$device_row = $database->select($sql, $parameters, 'row');
+
+					if (empty($device_row)) {
+						continue;
+					}
+
 					$array["devices"][0]["domain_uuid"] = $domain_uuid;
 					$array["devices"][0]["device_uuid"] = $device_uuid;
 					$array["devices"][0][$option_selected] = $new_setting;
